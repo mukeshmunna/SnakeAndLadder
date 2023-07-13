@@ -11,40 +11,75 @@ namespace SnakeAndLader
     internal class SnakeAndLader
     {
         const int NO_PLAY = 0, LADDER = 1, SNAKE = 2, WINNING_POSITION = 100, STARTING_POSITION = 0;
+        bool WON = false;
+        public void SetPosition(int position)
+        {
+            this.position = position;
+        }
+        public int GetPosition()
+        {
+            return this.position;
+        }
+        public void SetCount(int count)
+        {
+            this.count = count;
+        }
+        public int GetCount()
+        {
+            return this.count;
+        }
+        public void SetWon(bool WON)
+        {
+            this.WON = WON;
+        }
+        public bool GetWon()
+        {
+            return this.WON;
+        }
+
 
         int position = 0, count = 0;
         Random random = new Random();
+
         public int DieRoll()
         {
             int diePosition = random.Next(1, 7);
-            Console.WriteLine("Die Position is" + diePosition);
-            count++;
+            //Console.WriteLine(this.position);
+            this.count++;
             return diePosition;
         }
-        public void Game()
+        public int PlayGame()
         {
+            //while (this.position < WINNING_POSITION)
+            //{
             int option = random.Next(0, 3);
-            while (this.position < WINNING_POSITION)
+
+            int dice = DieRoll();
+            switch (option)
             {
-                switch (option)
-                {
-                    case NO_PLAY:
-                        break;
-                    case LADDER:
-                        int dice = DieRoll();
-                        if (this.position + dice < 100)
-                            this.position += dice;
-                        break;
-                    case SNAKE:
-                        dice = DieRoll();
-                        if (this.position < STARTING_POSITION)
-                            this.position = 0;
-                        else
-                            this.position -= dice;
-                        break;
-                }
+                case NO_PLAY:
+                    break;
+                case LADDER:
+
+                    if (this.position + dice <= 100)
+                        this.position += dice;
+                    break;
+                case SNAKE:
+
+                    if (this.position - dice < 0)
+                        this.position = 0;
+                    else
+                        this.position -= dice;
+                    break;
+                default:
+                    break;
             }
-            Console.WriteLine("the total number of dice rolled " + count);
+            if (this.position == WINNING_POSITION)
+            {
+                WON = true;
+            }
+            return this.position;
+            //}
         }
 
     }
